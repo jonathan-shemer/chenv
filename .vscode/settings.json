@@ -1,5 +1,4 @@
 {
-    "python.pythonPath": "/Users/jonathan/Library/Caches/pypoetry/virtualenvs/chenv-TGutpOCy-py3.9/bin/python",
     "python.linting.enabled": true,
     "restructuredtext.confPath": "${workspaceFolder}/docs"
 }

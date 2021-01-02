@@ -5,6 +5,7 @@
 /.pytype/
 /docs/_build/
 /src/*.egg-info/
+.vscode/
 __pycache__/
 .env*
 !.env*.example
