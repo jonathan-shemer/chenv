@@ -1,7 +1,9 @@
 """Nox sessions."""
+import tempfile
+from typing import Any
+
 import nox
 from nox.sessions import Session
-import nox_poetry
 
 
 package = "chenv"
@@ -9,12 +11,26 @@ nox.options.sessions = "lint", "safety", "mypy", "pytype", "tests"
 locations = "src", "tests", "noxfile.py", "docs/conf.py"
 
 
+def install_with_constraints(session: Session, *args: str, **kwargs: Any) -> None:
+    """Install packages constrained by Poetry's lock file."""
+    with tempfile.NamedTemporaryFile() as requirements:
+        session.run(
+            "poetry",
+            "export",
+            "--dev",
+            "--without-hashes",
+            "--format=requirements.txt",
+            f"--output={requirements.name}",
+            external=True,
+        )
+        session.install(f"--constraint={requirements.name}", *args, **kwargs)
+
+
 @nox.session(python="3.8")
 def black(session: Session) -> None:
     """Run black code formatter."""
     args = session.posargs or locations
-    nox_poetry.install(session, ".")
-    nox_poetry.install(session, "black")
+    install_with_constraints(session, "black")
     session.run("black", *args)
 
 
@@ -22,8 +38,7 @@ def black(session: Session) -> None:
 def lint(session: Session) -> None:
     """Lint using flake8."""
     args = session.posargs or locations
-    nox_poetry.install(session, ".")
-    nox_poetry.install(
+    install_with_constraints(
         session,
         "flake8",
         "flake8-annotations",
@@ -40,17 +55,25 @@ def lint(session: Session) -> None:
 @nox.session(python="3.8")
 def safety(session: Session) -> None:
     """Scan dependencies for insecure packages."""
-    nox_poetry.install(session, ".")
-    nox_poetry.install(session, "safety")
-    session.run("safety", "check", "--full-report")
+    with tempfile.NamedTemporaryFile() as requirements:
+        session.run(
+            "poetry",
+            "export",
+            "--dev",
+            "--format=requirements.txt",
+            "--without-hashes",
+            f"--output={requirements.name}",
+            external=True,
+        )
+        install_with_constraints(session, "safety")
+        session.run("safety", "check", f"--file={requirements.name}", "--full-report")
 
 
 @nox.session(python=["3.8"])
 def mypy(session: Session) -> None:
     """Type-check using mypy."""
     args = session.posargs or locations
-    nox_poetry.install(session, ".")
-    nox_poetry.install(session, "mypy")
+    install_with_constraints(session, "mypy")
     session.run("mypy", "--ignore-missing-imports", *args)
 
 
@@ -58,8 +81,7 @@ def mypy(session: Session) -> None:
 def pytype(session: Session) -> None:
     """Type-check using pytype."""
     args = session.posargs or ["--disable=import-error", *locations]
-    nox_poetry.install(session, ".")
-    nox_poetry.install(session, "pytype")
+    install_with_constraints(session, "pytype")
     session.run("pytype", *args)
 
 
@@ -67,8 +89,10 @@ def pytype(session: Session) -> None:
 def tests(session: Session) -> None:
     """Run the test suite."""
     args = session.posargs or ["--cov", "-m", "not e2e"]
-    nox_poetry.install(session, ".")
-    nox_poetry.install(session, "coverage", "pytest", "pytest-cov", "pytest-mock")
+    session.run("poetry", "install", "--no-dev", external=True)
+    install_with_constraints(
+        session, "coverage[toml]", "pytest", "pytest-cov", "pytest-mock"
+    )
     session.run("pytest", *args)
 
 
@@ -76,8 +100,8 @@ def tests(session: Session) -> None:
 def typeguard(session: Session) -> None:
     """Runtime type checking using Typeguard."""
     args = session.posargs or ["-m", "not e2e"]
-    nox_poetry.install(session, ".")
-    nox_poetry.install(session, "pytest", "pytest-mock", "typeguard")
+    session.run("poetry", "install", "--no-dev", external=True)
+    install_with_constraints(session, "pytest", "pytest-mock", "typeguard")
     session.run("pytest", f"--typeguard-packages={package}", *args)
 
 
@@ -85,16 +109,15 @@ def typeguard(session: Session) -> None:
 def xdoctest(session: Session) -> None:
     """Run examples with xdoctest."""
     args = session.posargs or ["all"]
-    nox_poetry.install(session, ".")
-    nox_poetry.install(session, "xdoctest")
+    session.run("poetry", "install", "--no-dev", external=True)
+    install_with_constraints(session, "xdoctest")
     session.run("python", "-m", "xdoctest", package, *args)
 
 
 @nox.session(python="3.8")
 def coverage(session: Session) -> None:
     """Upload coverage data."""
-    nox_poetry.install(session, ".")
-    nox_poetry.install(session, "coverage", "codecov")
+    install_with_constraints(session, "coverage[toml]", "codecov")
     session.run("coverage", "xml", "--fail-under=0")
     session.run("codecov", *session.posargs)
 
@@ -102,6 +125,6 @@ def coverage(session: Session) -> None:
 @nox.session(python="3.8")
 def docs(session: Session) -> None:
     """Build the documentation."""
-    nox_poetry.install(session, ".")
-    nox_poetry.install(session, "sphinx", "sphinx-autodoc-typehints")
+    session.run("poetry", "install", "--no-dev", external=True)
+    install_with_constraints(session, "sphinx", "sphinx-autodoc-typehints")
     session.run("sphinx-build", "docs", "docs/_build")

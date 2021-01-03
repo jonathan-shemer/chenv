@@ -9,8 +9,8 @@ jobs:
       with:
         python-version: '3.8'
         architecture: x64
-    - run: pip install nox nox-poetry
+    - run: pip install nox
     - run: pip install poetry
-    - run: python -m pip install pip==20.2.4 && nox --sessions tests-3.8 coverage
+    - run: nox --sessions tests-3.8 coverage
       env:
         CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
