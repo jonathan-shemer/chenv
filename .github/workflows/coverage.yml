@@ -9,7 +9,7 @@ jobs:
       with:
         python-version: '3.8'
         architecture: x64
-    - run: pip install nox
+    - run: pip install nox nox-poetry
     - run: pip install poetry
     - run: nox --sessions tests-3.8 coverage
       env:
