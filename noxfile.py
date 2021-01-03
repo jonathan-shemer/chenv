@@ -1,7 +1,7 @@
 """Nox sessions."""
 import nox
-import nox_poetry.patch  # noqa: F401
-from nox.sessions import Session  # noqa: I100
+from nox.sessions import Session
+import nox_poetry
 
 
 package = "chenv"
@@ -13,8 +13,8 @@ locations = "src", "tests", "noxfile.py", "docs/conf.py"
 def black(session: Session) -> None:
     """Run black code formatter."""
     args = session.posargs or locations
-    session.install(".")
-    session.install("black")
+    nox_poetry.install(session, ".")
+    nox_poetry.install(session, "black")
     session.run("black", *args)
 
 
@@ -22,8 +22,9 @@ def black(session: Session) -> None:
 def lint(session: Session) -> None:
     """Lint using flake8."""
     args = session.posargs or locations
-    session.install(".")
-    session.install(
+    nox_poetry.install(session, ".")
+    nox_poetry.install(
+        session,
         "flake8",
         "flake8-annotations",
         "flake8-bandit",
@@ -39,8 +40,8 @@ def lint(session: Session) -> None:
 @nox.session(python="3.8")
 def safety(session: Session) -> None:
     """Scan dependencies for insecure packages."""
-    session.install(".")
-    session.install("safety")
+    nox_poetry.install(session, ".")
+    nox_poetry.install(session, "safety")
     session.run("safety", "check", "--full-report")
 
 
@@ -48,8 +49,8 @@ def safety(session: Session) -> None:
 def mypy(session: Session) -> None:
     """Type-check using mypy."""
     args = session.posargs or locations
-    session.install(".")
-    session.install("mypy")
+    nox_poetry.install(session, ".")
+    nox_poetry.install(session, "mypy")
     session.run("mypy", "--ignore-missing-imports", *args)
 
 
@@ -57,8 +58,8 @@ def mypy(session: Session) -> None:
 def pytype(session: Session) -> None:
     """Type-check using pytype."""
     args = session.posargs or ["--disable=import-error", *locations]
-    session.install(".")
-    session.install("pytype")
+    nox_poetry.install(session, ".")
+    nox_poetry.install(session, "pytype")
     session.run("pytype", *args)
 
 
@@ -66,8 +67,8 @@ def pytype(session: Session) -> None:
 def tests(session: Session) -> None:
     """Run the test suite."""
     args = session.posargs or ["--cov", "-m", "not e2e"]
-    session.install(".")
-    session.install("coverage", "pytest", "pytest-cov", "pytest-mock")
+    nox_poetry.install(session, ".")
+    nox_poetry.install(session, "coverage", "pytest", "pytest-cov", "pytest-mock")
     session.run("pytest", *args)
 
 
@@ -75,8 +76,8 @@ def tests(session: Session) -> None:
 def typeguard(session: Session) -> None:
     """Runtime type checking using Typeguard."""
     args = session.posargs or ["-m", "not e2e"]
-    session.install(".")
-    session.install("pytest", "pytest-mock", "typeguard")
+    nox_poetry.install(session, ".")
+    nox_poetry.install(session, "pytest", "pytest-mock", "typeguard")
     session.run("pytest", f"--typeguard-packages={package}", *args)
 
 
@@ -84,16 +85,16 @@ def typeguard(session: Session) -> None:
 def xdoctest(session: Session) -> None:
     """Run examples with xdoctest."""
     args = session.posargs or ["all"]
-    session.install(".")
-    session.install("xdoctest")
+    nox_poetry.install(session, ".")
+    nox_poetry.install(session, "xdoctest")
     session.run("python", "-m", "xdoctest", package, *args)
 
 
 @nox.session(python="3.8")
 def coverage(session: Session) -> None:
     """Upload coverage data."""
-    session.install(".")
-    session.install("coverage", "codecov")
+    nox_poetry.install(session, ".")
+    nox_poetry.install(session, "coverage", "codecov")
     session.run("coverage", "xml", "--fail-under=0")
     session.run("codecov", *session.posargs)
 
@@ -101,6 +102,6 @@ def coverage(session: Session) -> None:
 @nox.session(python="3.8")
 def docs(session: Session) -> None:
     """Build the documentation."""
-    session.install(".")
-    session.install("sphinx", "sphinx-autodoc-typehints")
+    nox_poetry.install(session, ".")
+    nox_poetry.install(session, "sphinx", "sphinx-autodoc-typehints")
     session.run("sphinx-build", "docs", "docs/_build")
