@@ -1,7 +1,7 @@
 """Test cases for the `settings` module."""
-from chenv import settings
+import chenv.settings
 
 
 def test_filename_from_template() -> None:
     """Test filename_from_template."""
-    assert settings.filename_from_template("hello") == ".env.hello"
+    assert chenv.settings.filename_from_template("hello") == ".env.hello"

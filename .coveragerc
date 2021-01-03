@@ -1,0 +1,12 @@
+[paths]
+source =
+    src
+    */site-packages
+
+[run]
+branch = true
+source = chenv
+
+[report]
+show_missing = true
+# fail_under = 100
