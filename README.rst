@@ -1,4 +1,4 @@
-.. code-block:: none
+.. code-block:: text
 
           _
       ___| |__   ___ _ ____   __
