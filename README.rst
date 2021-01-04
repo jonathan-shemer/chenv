@@ -53,7 +53,7 @@ Installation
 To install `chenv`,
 run this command in your terminal:
 
-.. code-block:: console
+.. code-block:: shell
 
    $ pip install chenv
 
@@ -63,42 +63,47 @@ Usage
 
 `chenv`'s usage looks like:
 
-.. code-block:: console
+.. code-block:: shell
 
    $ chenv COMMAND [ARGS]
 
 Commands currently include:
 
-.. option:: blank
+=====
+blank
+=====
 
    Choose to set `.env` as a new, blank, `.env.blank` file.
 
-.. option:: heroku
+======
+heroku
+======
 
    Choose to set `.env` from a remote heroku app config-vars, as `.env.[app-name]`.
 
-   .. option:: -t <team>, --team <team>
+   - -t <team>, --team <team>
+       Pre-fill team name
 
-   Pre-fill team name
+   - -a <app>, --app <app>
+      Pre-fill app name
 
-   .. option:: -a <app>, --app <app>
-
-   Pre-fill app name
-
-.. option:: local
+=====
+local
+=====
 
    Choose to set `.env` from a local, pre-exsiting `.env.*` file.
 
-   .. option:: filename
-
-   Pre-fill file-suffix name
+   - filename
+      Pre-fill file-suffix name
 
 Project Configurations
 ----------------------
 
 `chenv` also provides two file types that manipulate the output of new `.env.*` files being set.
 
-.. option:: .envignore
+==========
+.envignore
+==========
 
    Specifies intentionally unwanted environment-variables.
    Each line in a envignore file specifies a pattern.
@@ -108,6 +113,8 @@ Project Configurations
    :Pattern:
       `.envignore` uses the unix filename pattern matching, similar to `.gitignore`'s, and as specified at https://docs.python.org/3/library/fnmatch.html
 
-.. option:: .envmerge
+=========
+.envmerge
+=========
 
    Sepecifies environment variables to merge / override after any input is chosen. This provides consistency to preffered settings such as the `logging-level`, or `NODE_ENV` for local development usage in node.js.
