@@ -10,7 +10,7 @@ chenv
 
 Modern local environment management
 
-The command-line interface creates and manages local `.env` files from various sources.
+This command-line interface creates and manages local `.env` files from various sources.
 
 Coupled with `python-dotenv <https://pypi.org/project/python-dotenv/>`_ for python,
 or `dotenv <https://www.npmjs.com/package/dotenv/>`_ for node.js development,
