@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "chenv"
-version = "0.2.1"
+version = "0.2.2"
 description = "modern local environment management"
 authors = ["Jonathan Shemer <i@jonathanshemer.com>"]
 license = "MIT"
