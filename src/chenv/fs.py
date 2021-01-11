@@ -38,6 +38,7 @@ def load_lines(file_path: str) -> Generator[str, None, None]:
     try:
         with open(file_path) as f:
             while (line := f.readline()) :
-                yield line
+                if (line := line.strip()) :
+                    yield line
     except FileNotFoundError:
         return
