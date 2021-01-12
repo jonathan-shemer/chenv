@@ -57,8 +57,8 @@ run this command in your terminal:
 
    $ pip install --user chenv
 
-Also make sure that your `$PATH` includes `$HOME/.local/bin`.
-If not, add this line to your .bashrc / .zshrc:
+Also make sure that your :code:`$PATH` includes :code:`$HOME/.local/bin`.
+If not, add this line to your :code:`.bashrc` / :code:`.zshrc`:
 
 .. code-block:: shell
 
