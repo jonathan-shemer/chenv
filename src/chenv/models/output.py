@@ -1,8 +1,14 @@
 """declares outputs used to generate `.env`-style files."""
 from dataclasses import dataclass
 import os
+import shlex
 
 from chenv import settings
+
+
+def _escape(value: str) -> str:
+    """Escape variable value inline."""
+    return shlex.quote(value).replace(os.linesep, r"\n")
 
 
 @dataclass(frozen=True)
@@ -27,5 +33,5 @@ class Output(Target):
     def body(self) -> str:  # noqa: ANN101
         """Generate a file body from the `self.variables` dict."""
         return os.linesep.join(
-            f"{key}={value}" for key, value in self.variables.items()
+            f"{key}={_escape(value)}" for key, value in self.variables.items()
         )
