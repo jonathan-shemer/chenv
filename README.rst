@@ -55,8 +55,14 @@ run this command in your terminal:
 
 .. code-block:: shell
 
-   $ pip install chenv
+   $ pip install --user chenv
 
+Also make sure that your :code:`$PATH` includes :code:`$HOME/.local/bin`.
+If not, add this line to your :code:`.bashrc` / :code:`.zshrc`:
+
+.. code-block:: shell
+
+   export PATH=$HOME/.local/bin:$PATH;
 
 Usage
 -----
