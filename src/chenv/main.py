@@ -6,6 +6,6 @@ settings.load()
 
 def main() -> None:
     """Main function / entry point for the application."""
-    import chenv.inputs  # noqa: F401
+    from chenv import subcommands  # noqa: F401
 
     cli.cli()
