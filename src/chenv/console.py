@@ -40,10 +40,7 @@ def as_link(
     source_color: Color = Color.BRIGHT_BLACK,
 ) -> str:
     """Formart symlink relation, standardized, in color."""
-    return (
-        f"{click.style(source, fg=source_color.value)}"
-        f" → {click.style(target, fg=target_color.value)}"
-    )
+    return f"{click.style(source, fg=source_color.value)}" f" → {click.style(target, fg=target_color.value)}"
 
 
 def contextify(context: str, context_fg: Color, message: str) -> str:
@@ -63,9 +60,7 @@ def error(context: str, message: str) -> None:
 
 def fatal(context: str, message: str, exit_code: int) -> NoReturn:
     """Exit the program after echoing an error colored messages with context."""
-    error(
-        context, f"({click.style(str(exit_code), fg=Color.YELLOW.value)}) - {message}"
-    )
+    error(context, f"({click.style(str(exit_code), fg=Color.YELLOW.value)}) - {message}")
     if 0 < exit_code < 126:
         exit(exit_code)
 
@@ -73,18 +68,18 @@ def fatal(context: str, message: str, exit_code: int) -> NoReturn:
 
 
 def get_env_or_prompt(context: str, key: str) -> str:
-    """Get or promt user for chenv-specific environment variable."""
+    """Get or prompt user for chenv-specific environment variable."""
     try:
         return os.environ[key]
     except KeyError:
         pass
 
-    ephasized_key = click.style(key, fg=Color.YELLOW.value)
-    info(context, f"Environment variable {ephasized_key} is not defined.")
+    emphasized_key = click.style(key, fg=Color.YELLOW.value)
+    info(context, f"Environment variable {emphasized_key} is not defined.")
     value = questionary.text("Define new value:", validate=bool).ask()
     if not value:
         raise ValueError(f"Cannot set value `{value}` to `{key}`")
 
     settings.add(key, value)
-    settings.load()
+    settings.mount()
     return value

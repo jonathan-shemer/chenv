@@ -16,8 +16,6 @@ def which() -> None:
         if os.path.exists(target):
             click.echo(as_link(target, Color.BRIGHT_GREEN))
         else:
-            click.echo(
-                f"{as_link(target, Color.RED)}" " (broken, links to non-existent file)."
-            )
+            click.echo(f"{as_link(target, Color.RED)}" " (broken, links to non-existent file).")
     except FileNotFoundError:
         click.echo(f'{as_link("null", Color.YELLOW)} (does not link to any file).')

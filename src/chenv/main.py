@@ -1,7 +1,7 @@
 """chenv. modern local environment management."""
 from chenv import cli, settings
 
-settings.load()
+settings.mount()
 
 
 def main() -> None:

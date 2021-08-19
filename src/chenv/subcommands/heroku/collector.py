@@ -28,9 +28,7 @@ def _api_get(uri: str) -> httpx.Response:
 
 def _prompt_team_apps(default_team: Optional[str], apps: List[dict]) -> List[dict]:
     apps_by_team = groupby(curry(get_in, ["team", "name"]), apps)
-    normalized_apps_by_team = dissoc(
-        assoc(apps_by_team, "personal", apps_by_team[None]), None
-    )
+    normalized_apps_by_team = dissoc(assoc(apps_by_team, "personal", apps_by_team[None]), None)
 
     if default_team and default_team in normalized_apps_by_team:
         team = default_team
@@ -40,9 +38,7 @@ def _prompt_team_apps(default_team: Optional[str], apps: List[dict]) -> List[dic
                 click.style(team, fg="magenta")
                 for team in normalized_apps_by_team))}"""
         )
-        team = questionary.autocomplete(
-            message="Choose team:", choices=normalized_apps_by_team
-        ).ask()
+        team = questionary.autocomplete(message="Choose team:", choices=normalized_apps_by_team).ask()
 
     return normalized_apps_by_team[team]
 
@@ -52,9 +48,7 @@ def _prompt_app(default_app: Optional[str], apps: List[dict]) -> dict:
     if default_app and default_app in apps_by_name:
         name = default_app
     else:
-        name = questionary.autocomplete(
-            message="Choose app:", choices=apps_by_name
-        ).ask()
+        name = questionary.autocomplete(message="Choose app:", choices=apps_by_name).ask()
 
     return first(apps_by_name[name])
 
