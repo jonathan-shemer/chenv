@@ -1,12 +1,14 @@
 """general settings for the application."""
+import os
+
 from dotenv import load_dotenv
 
 from chenv import fs
 
-DOTENV = ".env"
-PREFIX = f"{DOTENV}."
-ENVMERGE = ".envmerge"
-ENVIGNORE = ".envignore"
+DOTENV: str = ".env"
+PREFIX: str = f"{DOTENV}."
+ENVMERGE: str = ".envmerge"
+ENVIGNORE: str = ".envignore"
 
 
 def _dotenv_path() -> str:
@@ -21,3 +23,8 @@ def mount() -> None:
 def add(key: str, value: str) -> None:
     """Adds a new env-variable to the application's local `.env` file."""
     fs.dump(_dotenv_path(), {key: value}, overwrite=False)
+
+
+def debug_mode() -> bool:
+    """Returns whether `chenv` runs in debug mode."""
+    return os.getenv("DEBUG")

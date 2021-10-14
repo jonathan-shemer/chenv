@@ -66,6 +66,7 @@ def _get_config_vars(app: dict) -> dict:
 @cli.command(help="choose between remote config-vars, as defined in an heroku app")
 @click.option("--team", "-t", help="Heroku team name")
 @click.option("--app", "-a", help="Heroku app name in the team")
+@console.pretty_failures
 def heroku(team: Optional[str], app: Optional[str]) -> Output:
     """Choose between remote config-vars, as defined in an heroku app."""
     chosen_app = _choose_app(team, app)

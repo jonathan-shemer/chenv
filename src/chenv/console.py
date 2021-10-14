@@ -1,7 +1,8 @@
 """user inteaction utilities."""
 from enum import Enum
+from functools import wraps
 import os
-from typing import NoReturn
+from typing import Any, Callable, NoReturn
 
 import click
 import questionary
@@ -83,3 +84,19 @@ def get_env_or_prompt(context: str, key: str) -> str:
     settings.add(key, value)
     settings.mount()
     return value
+
+
+def pretty_failures(func: Callable) -> Callable:
+    """Prettifies failures for wrapped function, unless in debug mode."""
+
+    @wraps(func)
+    def wrapper(*args: Any, **kwargs: Any) -> Any:
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            if settings.debug_mode():
+                raise
+
+            fatal(__name__, f"{e.__class__.__name__} - {str(e)}", 1)
+
+    return wrapper

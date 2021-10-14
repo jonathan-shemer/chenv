@@ -7,12 +7,13 @@ import questionary
 
 from chenv import fs, settings
 from chenv.cli import cli
-from chenv.console import fatal
+from chenv.console import fatal, pretty_failures
 from chenv.models.output import Output
 
 
 @cli.command("local", help="choose between local, existing, .env files")
 @click.argument("filename", required=False, metavar="filename")
+@pretty_failures
 def collect(filename: Optional[str]) -> Output:
     """Choose between local, existing, .env files."""
     file_suffix = (filename or "").replace(settings.PREFIX, "")
