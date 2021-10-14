@@ -27,4 +27,4 @@ def add(key: str, value: str) -> None:
 
 def debug_mode() -> bool:
     """Returns whether `chenv` runs in debug mode."""
-    return os.getenv("DEBUG")
+    return bool(os.getenv("DEBUG"))
