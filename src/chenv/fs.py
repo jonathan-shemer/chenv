@@ -29,7 +29,7 @@ def load(*, path: Optional[str] = None, file_suffix: Optional[str] = None) -> di
 
 
 def assign_env(filename: str, variables: Dict[str, str], overwrite: bool = True) -> None:
-    """Dumps output as f'.env.{file_suffix}' file, then links .env to it."""
+    """Dumps output as filename, then links .env to it."""
     dump(filename, variables, overwrite=overwrite)
     force_link(filename)
 
@@ -41,17 +41,17 @@ def dump(filename: str, variables: Dict[str, str], overwrite: bool) -> None:
             pass
 
     for key, value in variables.items():
-        set_key(filename, key, value)
+        set_key(filename, key, value)  # type: ignore
 
 
 def force_link(source_path: str) -> None:
     """Symlinks source_path to `.env`, forcibly."""
     try:
-        os.remove(".env")
+        os.remove(settings.DOTENV)
     except FileNotFoundError:
         pass
 
-    os.symlink(source_path, ".env")
+    os.symlink(source_path, settings.DOTENV)
 
 
 def load_lines(file_path: str) -> Generator[str, None, None]:

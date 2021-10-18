@@ -5,7 +5,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.8']
+        python-version: ['3.8', '3.9']
     name: Python ${{ matrix.python-version }}
     steps:
     - uses: actions/checkout@v2
@@ -13,6 +13,8 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
         architecture: x64
-    - run: pip install nox
     - run: pip install poetry
-    - run: nox
+    - run: pip install nox
+    - run: nox -p ${{ matrix.python-version }}
+      env:
+        CODECOV_TOKEN: ${{secrets.CODECOV_TOKEN}}
