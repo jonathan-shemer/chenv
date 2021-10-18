@@ -12,16 +12,12 @@ from . import __version__
 settings.mount()
 
 
-@click.group(invoke_without_command=True)
+@click.group()
 @click.pass_context
 @click.version_option(version=__version__)
 def cli(ctx: Context) -> None:
     """chenv. modern local environment management."""
     click.secho("chenv. modern local environment management", fg=Color.GREEN.value)
-    if ctx.invoked_subcommand is None:
-        import chenv.subcommands
-
-        ctx.invoke(chenv.subcommands.local.collect)
 
 
 @cli.resultcallback()
