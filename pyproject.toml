@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "chenv"
-version = "0.4.1"
+version = "0.4.2"
 description = "modern local environment management"
 authors = ["Jonathan Shemer <i@jonathanshemer.com>"]
 license = "MIT"
@@ -19,6 +19,7 @@ python-dotenv = "^0.19.1"
 httpx = "^0.19.0"
 toolz = "^0.11.1"
 questionary = "^1.10.0"
+pytype = "^2021.10.18"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.1"
@@ -41,7 +42,7 @@ sphinx-autodoc-typehints = "^1.12.0"
 codecov = "^2.1.12"
 pylint = "^2.11.1"
 flake8-annotations = "^2.7.0"
-pytype = "^2021.10.11"
+pytype = "^2021.10.18"
 coverage = "^6.0.2"
 
 [tool.poetry.scripts]

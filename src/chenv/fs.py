@@ -41,7 +41,7 @@ def dump(filename: str, variables: Dict[str, str], overwrite: bool) -> None:
             pass
 
     for key, value in variables.items():
-        set_key(filename, key, value)  # type: ignore
+        set_key(filename, key, value, quote_mode="never")  # type: ignore
 
 
 def force_link(source_path: str) -> None:

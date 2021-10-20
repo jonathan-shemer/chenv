@@ -55,7 +55,7 @@ def test_dump(overwrite: bool, preexisting: bool) -> None:
         if preexisting:
             with open(path, "w") as f:
                 # note: preexisting files must end with newline.
-                f.write("INIT='true'\n")
+                f.write("INIT=true\n")
 
         if not (preexisting or overwrite):
             with pytest.raises(RuntimeError):
@@ -64,7 +64,7 @@ def test_dump(overwrite: bool, preexisting: bool) -> None:
             chenv.fs.dump(path, _SAMPLE_VARIABLES, overwrite)
             with open(path) as f:
                 content: str = f.read()
-                assert content == ("INIT='true'\n" if preexisting else "") + "HELLO='world'\nCHENV='testing'\n"
+                assert content == ("INIT=true\n" if preexisting else "") + "HELLO=world\nCHENV=testing\n"
 
 
 @pytest.mark.parametrize("preexisting", [False, True])
@@ -78,7 +78,7 @@ def test_force_link(preexisting: bool) -> None:
         symlink.assert_called_once_with(filename, chenv.settings.DOTENV)
 
 
-@pytest.mark.parametrize("path, expected", [(_SAMPLE_FILE, ['HELLO="world"', 'CHENV="testing"']), (".env.missing", [])])
+@pytest.mark.parametrize("path, expected", [(_SAMPLE_FILE, ["HELLO=world", 'CHENV="testing"']), (".env.missing", [])])
 def test_load_lines(path: str, expected: Optional[Dict[str, str]]) -> None:
     """Test `load_lines`."""
     assert list(chenv.fs.load_lines(path)) == expected

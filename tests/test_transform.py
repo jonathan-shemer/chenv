@@ -28,11 +28,11 @@ def _patch_merge_variables(variables: Dict[str, str]) -> Generator:
     [
         (dict(), [], dict(), dict()),
         (dict(HELLO_1="world"), [], dict(), dict(HELLO_1="world")),
-        (dict(HELLO_2="world\nEscaping"), [], dict(), dict(HELLO_2="world\\nEscaping")),
+        (dict(HELLO_2="world\nEscaping"), [], dict(), dict(HELLO_2='"world\\nEscaping"')),
         (dict(HELLO_3="world"), ["HE*"], dict(), dict()),
         (dict(HELLO_4="world"), ["*LLO*"], dict(), dict()),
         (dict(HELLO_5="world"), ["*LLO*"], dict(HELLO="world"), dict(HELLO="world")),
-        (dict(HELLO_6="world"), [], dict(HELLO_6="this is my world"), dict(HELLO_6="this is my world")),
+        (dict(HELLO_6="world"), [], dict(HELLO_6="this is my world"), dict(HELLO_6='"this is my world"')),
     ],
 )
 def test_apply(variables: Dict[str, str], ignore: List[str], merge: Dict[str, str], expected: Dict[str, str]) -> None:
